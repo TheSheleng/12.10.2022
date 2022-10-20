@@ -4,37 +4,44 @@ namespace vhcl
 {
 	class Vehicle
 	{
-		const int tank_volume;
+	protected:
+		const int TANK_VOLUME;
 		int petrol_amoute;
 
 	public:
-		Vehicle(double petrol_amoute, double tank_volume);
+		Vehicle(double petrol_amoute, double TANK_VOLUME);
 		double getTankVolume();
 		double getPetrolAmoute();
-		virtual void arrive();
-		virtual bool leave();
+		virtual void arrive(unsigned int& _people, double& _petrol, double& _goods);
+		virtual bool leave(unsigned int& _people, double& _petrol, double& _goods);
 	};
 
 	class Bus : public Vehicle
 	{
-		const int max_people;
+	protected:
+		const int MAX_PEOPLE;
 		int peole_count;
 
 	public:
-		Bus(int peole_count, int max_people, double petrol_amoute, double tank_volume);
+		Bus(int peole_count, int MAX_PEOPLE, double petrol_amoute, double TANK_VOLUME);
 		int getPeopleCount();
 		int getMaxPeople();
+		void arrive(unsigned int& _people, double& _petrol, double& _goods) override;
+		bool leave(unsigned int& _people, double& _petrol, double& _goods) override;
 	};
 
 	class Truck : public Vehicle
 	{
-		const double max_load;
+	protected:
+		const double MAX_LOAD;
 		double load_count;
 
 	public:
-		Truck(double load_count, int max_load, double petrol_amoute, double tank_volume);
+		Truck(double load_count, double MAX_LOAD, double petrol_amoute, double TANK_VOLUME);
 		double getLoadCount();
 		double getMaxLoad();
+		void arrive(unsigned int& _people, double& _petrol, double& _goods) override;
+		bool leave(unsigned int& _people, double& _petrol, double& _goods) override;
 	};
 }
 

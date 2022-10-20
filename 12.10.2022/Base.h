@@ -1,47 +1,37 @@
 #pragma once
 
+#include <vector>
 #include <fstream>
+#include "Vehicle.h"
 
 using namespace std;
 
 namespace bs
 {
-	class
+	struct
 	{
 		const char* file_path = "base.info";
 
-		unsigned int people;
-		unsigned int vehicles;
-		double petrol;
-		double goods;
+		unsigned int people = 0U;
+		vector<vhcl::Vehicle*> vehicles;
+		double petrol = 0;
+		double goods = 0;
 
-	public:
-		void save() 
+		void arrive(vhcl::Vehicle*& _vehicles)
 		{
-			fstream file(file_path, ios::out | ios::trunc | ios::binary);
-			
-			if (file.is_open())
-			{
-				file.write((char*)&people, sizeof(people));
-				file.write((char*)&vehicles, sizeof(vehicles));
-				file.write((char*)&petrol, sizeof(petrol));
-				file.write((char*)&goods, sizeof(goods));
-				file.close();
-			}
+			_vehicles->arrive(people, petrol, goods);
+			vehicles.push_back(_vehicles);
 		}
 
-		void load() 
+		vhcl::Vehicle* leave(unsigned int _index)
 		{
-			fstream file(file_path, ios::in | ios::binary);
-
-			if (file.is_open())
+			if (vehicles[_index]->leave(people, petrol, goods))
 			{
-				file.read((char*)&people, sizeof(people));
-				file.read((char*)&vehicles, sizeof(vehicles));
-				file.read((char*)&petrol, sizeof(petrol));
-				file.read((char*)&goods, sizeof(goods));
-				file.close();
+				vhcl::Vehicle* temp = vehicles[_index];
+				vehicles.erase(vehicles.begin() + _index);
+				return temp;
 			}
+			else return nullptr;
 		}
 	} Base;
 }
